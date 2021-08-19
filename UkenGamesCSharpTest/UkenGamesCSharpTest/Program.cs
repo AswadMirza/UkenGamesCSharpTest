@@ -26,14 +26,24 @@ namespace UkenGamesCSharpTest
             //string path = AppDomain.CurrentDomain.BaseDirectory;
             //string path = "src/1.txt";
             //string path = Environment.CurrentDirectory;
-            string path = "../../../src/1.txt";
+            string path;// = "../../../src/";
             List<int> numbers;
             int frequency = 0;
             int lowestNumber;
 
-            Console.WriteLine(path);
+            for (int i = 1; i <= 5; i++) {
+                path = $"../../../src/{i}.txt";
+                string[] lines = File.ReadAllLines(path);
+                numbers = ReadNumbersFromString(lines);
+                numbers.Sort();
+                lowestNumber = CompareEntireList(numbers);
+                frequency = FrequencyCount(numbers,lowestNumber);
+                Console.WriteLine($"File:{i}.txt, Number:{lowestNumber}, Repeated: {frequency} times");
+            }
+
+            /*
+              Console.WriteLine(path);
             Console.WriteLine("hi");
-            
             string[] lines = File.ReadAllLines(path);
             Console.WriteLine("Reading File 1");
             foreach (string line in lines) {
@@ -52,8 +62,8 @@ namespace UkenGamesCSharpTest
             {
                 Console.WriteLine(number);
             }
-            frequency = FrequencyCount(numbers, 0);
-            Console.WriteLine($"The number 0 occurs {frequency} times");
+            //frequency = FrequencyCount(numbers, 0);
+           // Console.WriteLine($"The number 0 occurs {frequency} times");
 
             //frequency = FrequencyCount(numbers, 9);
             //Console.WriteLine($"The number 9 occurs {frequency} times");
@@ -63,14 +73,15 @@ namespace UkenGamesCSharpTest
             Console.WriteLine("Comparing entire list");
 
             lowestNumber =CompareEntireList(numbers);
+            frequency = FrequencyCount(numbers, lowestNumber);
             Console.WriteLine($"The lowest number is {lowestNumber} it is repeated: {frequency} times");
-            
+            */
         }
 
-        
+
 
         //A method to help get a list of numbers from an array of strings
-        
+
         private static List<int> ReadNumbersFromString(String[] lines) {
             List<int> numbers = new List<int>();
             foreach (string line in lines) {
@@ -103,7 +114,7 @@ namespace UkenGamesCSharpTest
               
                 index++;
             }
-            Console.WriteLine($"The number {element} occurs {frequency} times");
+            //Console.WriteLine($"The number {element} occurs {frequency} times");
             return frequency;
         }
 
@@ -115,10 +126,34 @@ namespace UkenGamesCSharpTest
         // if it returns 1 element 1 is occuring more
         public static int CompareFrequencies(List<int> numbers, int element1, int element2) {
             int comparison;
-            comparison=FrequencyCount(numbers, element1).CompareTo(FrequencyCount(numbers, element2));
+            int element1Frequency = FrequencyCount(numbers, element1);
+            int element2Frequency = FrequencyCount(numbers, element2);
+            comparison =element1Frequency.CompareTo(element2Frequency);
 
             //Debugging
-            if (comparison == -1)
+            switch (comparison) {
+                case -1:
+                   // Console.WriteLine($"{element1} occurs less then {element2}");
+                    if (element1Frequency == 1) {
+                       // Console.WriteLine($"{element1} Only occurs 1 time, disregarding");
+                        comparison = 1;
+                    }
+                    break;
+                case 0:
+                    //Console.WriteLine($"{element1} occurs equal to {element2}");
+                    break;
+
+                default:
+                    //Console.WriteLine($"{element1} occurs more then {element2}");
+                    if (element2Frequency == 1) {
+                       // Console.WriteLine($"{element2} occurs only once, disregarding");
+                        comparison = -1;
+                    }
+                    break;
+
+            }
+            /*
+             if (comparison == -1)
             {
                 Console.WriteLine($"{element1} occurs less then {element2}");
             }
@@ -129,7 +164,11 @@ namespace UkenGamesCSharpTest
             else {
                 Console.WriteLine($"{element1} occurs more then {element2}");
             }
-            
+             
+             
+             */
+
+
             return comparison;
            
         }
@@ -142,8 +181,12 @@ namespace UkenGamesCSharpTest
             int index = numbers.LastIndexOf(numbers[0]);
             int nextNumber=numbers[index];
             bool continueSearch = true;
-            if (index + 1 < numbers.Count) {
+            if (index + 1 < numbers.Count)
+            {
                 nextNumber = numbers[index + 1];
+            }
+            else {
+                continueSearch = false;
             }
             while (continueSearch) {
                 int comparison = CompareFrequencies(numbers, lowestNumber, nextNumber);
@@ -175,7 +218,7 @@ namespace UkenGamesCSharpTest
                 }
             }
 
-            Console.WriteLine($"Lowest occuring number is {lowestNumber}");
+            //Console.WriteLine($"Lowest occuring number is {lowestNumber}");
             return lowestNumber;
         
         }
