@@ -27,16 +27,16 @@ namespace UkenGamesCSharpTest
         NOTE: I am going by the assumption that by "lowest repeating number it must occur at least twice
         since you cant say a number occuring once is repetition"
 
-        NOTE: Because this is a console application other methods used have to be static because main is static.
+        NOTE: Because this is a console application other methods used in this class have to be static because main is static.
          */
 
         static void Main(string[] args)
         {
-
             string path;
             List<int> numbers;
             int frequency = 0;
             int lowestNumber;
+
             for (int i = 1; i <= 5; i++)
             {
                 //Relative path to the src folder and the text files
@@ -50,8 +50,6 @@ namespace UkenGamesCSharpTest
             }
         }
 
-
-
         //A method to help get a list of numbers from an array of strings
 
         private static List<int> ReadNumbersFromString(String[] lines)
@@ -63,17 +61,14 @@ namespace UkenGamesCSharpTest
             }
             return numbers;
         }
-
         // A method to help count the frequency of one number in the list 
-        //sorts the list and also 
+        // Assumes list is already sorted
         private static int FrequencyCount(List<int> numbers, int element)
         {
-            int frequency = 0; 
-            //sorts the list of numbers before checking
+            int frequency = 0;
             bool continueSearch = true;
-            numbers.Sort(); 
             // finds the index of the first occurence of the element within the list
-            int index = numbers.IndexOf(element); 
+            int index = numbers.IndexOf(element);
             //Will break out of the loop if the element we are looking for does not match the next item or we are at the end of the list
             while (continueSearch && index < numbers.Count)
             {
@@ -85,19 +80,17 @@ namespace UkenGamesCSharpTest
                 {
                     continueSearch = false;
                 }
-
                 index++;
             }
             return frequency;
         }
-
-
-
         /*
          Method to compare  frequency counts
         if it returns -1, element 1 is less occuring, 
         if it returns 0, element 1 and 2 are the same occurences
         if it returns 1 element 1 is occuring more
+
+        Assumes list is already sorted
          */
         private static int CompareFrequencies(List<int> numbers, int element1, int element2)
         {
@@ -133,11 +126,12 @@ namespace UkenGamesCSharpTest
             return comparison;
 
         }
-
-        //compares entire list and gets the lowest occuring number
+        /*
+            compares entire list and gets the lowest occuring number
+            Assumes list is already sorted
+        */
         public static int CompareEntireList(List<int> numbers)
         {
-            numbers.Sort();
             //By default in a sorted list the lowest number is the first item
             int lowestNumber = numbers[0];
             int index = numbers.LastIndexOf(numbers[0]);
@@ -183,8 +177,6 @@ namespace UkenGamesCSharpTest
                     continueSearch = false;
                 }
             }
-
-            //Console.WriteLine($"Lowest occuring number is {lowestNumber}");
             return lowestNumber;
 
         }
